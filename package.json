@@ -4,16 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-<<<<<<< HEAD
     "dev": "node scripts/dev.mjs",
     "dev:client": "vite",
     "dev:server": ".\\backend\\.venv-flask\\Scripts\\python.exe backend/app.py",
     "start": ".\\backend\\.venv-flask\\Scripts\\python.exe backend/app.py",
     "test": ".\\backend\\.venv-flask\\Scripts\\python.exe -m unittest discover -s backend -p test_*.py",
     "admin": ".\\backend\\.venv-flask\\Scripts\\python.exe backend/manage.py create-officer",
-=======
-    "dev": "vite",
->>>>>>> e9d2c44647ce0c4bbbcc2be571c954d38f42043d
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
