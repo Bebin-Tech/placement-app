@@ -1,0 +1,34 @@
+import { createRequire } from 'node:module';
+import assert from 'node:assert/strict';
+import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { spawn, execFileSync } from 'node:child_process';
+const require=createRequire(import.meta.url);
+const {chromium}=require(process.env.PLAYWRIGHT_PATH || 'playwright');
+const temp=mkdtempSync(join(tmpdir(),'campus-flask-browser-')),database=join(temp,'test.db'),port='5057';
+const python=process.env.PYTHON_PATH || 'backend/.venv-flask/Scripts/python.exe';
+const environment={...process.env,DATABASE_PATH:database,PORT:port,ADMIN_PASSWORD:'Browser-test-123'};
+execFileSync(python,['backend/manage.py','create-officer','officer@example.com','Placement Officer'],{env:environment});
+const backend=spawn(python,['backend/app.py'],{env:environment,stdio:'ignore'}),base=`http://127.0.0.1:${port}`;
+for(let attempt=0;attempt<50;attempt++){try{if((await fetch(base+'/api/health')).ok)break}catch{}await new Promise(resolve=>setTimeout(resolve,100));if(attempt===49)throw new Error('Flask backend did not start.');}
+let browser;
+try{
+ browser=await chromium.launch({headless:true,channel:process.env.BROWSER_CHANNEL || 'chrome'});const studentContext=await browser.newContext(),officerContext=await browser.newContext();const student=await studentContext.newPage(),officer=await officerContext.newPage();
+ const errors=[];student.on('pageerror',e=>errors.push(e.message));officer.on('pageerror',e=>errors.push(e.message));
+ mkdirSync('artifacts',{recursive:true});await student.goto(base);await student.getByRole('heading',{name:'Welcome back'}).waitFor();await student.screenshot({path:'artifacts/login-desktop.png',fullPage:true});
+ await student.getByRole('button',{name:'New here? Create an account'}).click();await student.getByLabel('Full name').fill('Browser Student');await student.getByLabel('Email address').fill('student@example.com');await student.getByLabel('Password',{exact:true}).fill('Browser-test-123');await student.getByRole('button',{name:'Create account',exact:true}).click();await student.getByRole('heading',{name:'Welcome, Browser'}).waitFor();
+ await student.getByRole('button',{name:'My profile',exact:true}).click();await student.getByLabel('Education / degree').fill('B.Tech Computer Science');await student.getByLabel('Graduation year').fill('2027');await student.getByLabel('CGPA (out of 10)').fill('8.6');await student.getByLabel('Skills, separated by commas').fill('TypeScript, SQL');await student.getByRole('button',{name:'Save profile',exact:true}).click();await student.getByRole('status').filter({hasText:'Profile saved'}).waitFor();await student.getByLabel('Upload PDF resume').setInputFiles({name:'resume.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.4\nBrowser test')});await student.getByRole('status').filter({hasText:'Resume uploaded'}).waitFor();
+ await officer.goto(base);await officer.getByLabel('Email address').fill('officer@example.com');await officer.getByLabel('Password',{exact:true}).fill('Browser-test-123');await officer.getByRole('button',{name:'Sign in',exact:true}).click();await officer.getByRole('heading',{name:'Welcome, Placement'}).waitFor();
+ await officer.getByRole('button',{name:'Companies',exact:true}).click();await officer.getByRole('button',{name:'Add company',exact:true}).click();await officer.getByLabel('Company name').fill('Campus Labs');await officer.getByLabel('Industry', {exact:true}).fill('Technology');await officer.getByLabel('Location',{exact:true}).fill('Chennai');await officer.getByRole('dialog').getByRole('button',{name:'Add company',exact:true}).click();await officer.getByRole('dialog').waitFor({state:'hidden'});
+ await officer.getByRole('button',{name:'Job openings',exact:true}).click();await officer.getByRole('button',{name:'Post a job opening',exact:true}).click();await officer.getByLabel('Company',{exact:true}).selectOption({label:'Campus Labs'});await officer.getByLabel('Role title').fill('Graduate Software Engineer');await officer.getByLabel('Job description').fill('Build thoughtful software with our engineering team.');await officer.getByLabel('Minimum CGPA').fill('7');await officer.getByLabel('Application deadline').fill('2099-12-31');await officer.getByLabel('Skills (comma separated)').fill('TypeScript, SQL');await officer.getByRole('button',{name:'Publish opening',exact:true}).click();await officer.getByRole('dialog').waitFor({state:'hidden'});
+ await student.getByRole('button',{name:'Opportunities',exact:true}).click();await student.getByRole('heading',{name:'Graduate Software Engineer'}).waitFor();await student.getByRole('button',{name:'Save Graduate Software Engineer',exact:true}).click();await student.getByRole('status').filter({hasText:'Saved roles updated'}).waitFor();await student.getByRole('button',{name:'Apply now',exact:true}).click();await student.getByRole('status').filter({hasText:'Application submitted'}).waitFor();
+ await officer.getByRole('button',{name:'Applications',exact:true}).click();await officer.getByLabel('Update application for Browser Student').selectOption('Shortlisted');await officer.locator('.status').filter({hasText:'Shortlisted'}).waitFor();await officer.getByLabel('Update application for Browser Student').selectOption('Interview scheduled');await officer.getByLabel('Interview date and time (your timezone)').fill('2099-10-01T10:30');await officer.getByLabel('Location or meeting link').fill('Campus room 1');await officer.getByRole('button',{name:'Schedule interview',exact:true}).click();await officer.getByRole('dialog').waitFor({state:'hidden'});
+ await student.getByRole('button',{name:'My applications',exact:true}).click();await student.locator('.status').filter({hasText:'Interview scheduled'}).waitFor();await student.screenshot({path:'artifacts/student-applications.png',fullPage:true});
+ await officer.getByRole('button',{name:'Overview',exact:true}).click();await officer.screenshot({path:'artifacts/officer-dashboard.png',fullPage:true});
+ await student.reload();await student.getByRole('heading',{name:'Welcome, Browser'}).waitFor();await student.getByRole('button',{name:'Saved roles',exact:true}).click();await student.getByRole('heading',{name:'Graduate Software Engineer'}).waitFor();
+ await student.setViewportSize({width:390,height:844});await student.screenshot({path:'artifacts/student-mobile.png',fullPage:true});assert.equal(await student.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth),false,'Mobile page must not overflow');
+ assert.deepEqual(errors,[]);console.log('Browser workflow passed: registration, profile, resume, company creation, job publication, saved roles, application, interview, live updates, reload and mobile layout.');
+}finally{await browser?.close();backend.kill();rmSync(temp,{recursive:true,force:true});}
+
+

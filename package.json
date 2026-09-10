@@ -1,0 +1,28 @@
+{
+  "name": "placement-appplacement-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:client": "vite",
+    "dev:server": ".\\backend\\.venv-flask\\Scripts\\python.exe backend/app.py",
+    "start": ".\\backend\\.venv-flask\\Scripts\\python.exe backend/app.py",
+    "test": ".\\backend\\.venv-flask\\Scripts\\python.exe -m unittest discover -s backend -p test_*.py",
+    "admin": ".\\backend\\.venv-flask\\Scripts\\python.exe backend/manage.py create-officer",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  },
+  "dependencies": {
+    "lucide-react": "^1.40.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  }
+}
