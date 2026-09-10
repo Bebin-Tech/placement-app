@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # campus.flow
 
 A working campus placement application for students, recruiters, and placement officers. It uses a React + TypeScript frontend, Flask API, and persistent SQLite storage. Python 3.12+ and Node.js are required for local development.
@@ -116,3 +117,37 @@ Docker and a public HTTPS deployment have not been exercised in the local test e
 ## Legacy data
 
 The original prototype database at `backend/placement.db` is preserved and is not used by the application. It is not imported automatically because it contains a plaintext demo password and expired job dates. New Flask data is stored at `data/campus.db`.
+=======
+# campus.flow
+
+A campus placement workspace for students, placement officers, and companies.
+
+## Frontend
+
+```powershell
+npm install
+npm run dev
+```
+
+## Flask API
+
+```powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python app.py
+```
+
+The API seeds a local `backend/placement.db` SQLite database on first run.
+
+### API surface
+
+- `POST /api/auth/register` and `POST /api/auth/login`
+- `GET /api/jobs` and `POST /api/jobs`
+- `GET /api/companies`
+- `POST /api/applications`
+- `GET /api/applications`
+- `PATCH /api/applications/<id>` for review, interviews, and selection updates
+- `GET /api/health`
+>>>>>>> e9d2c44647ce0c4bbbcc2be571c954d38f42043d
