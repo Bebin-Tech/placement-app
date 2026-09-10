@@ -75,7 +75,9 @@ def secure_mutation():
     if request.method in {'POST','PATCH','PUT','DELETE'}:
         if not request.is_json:fail(415,'Send application/json.')
         origin=request.headers.get('Origin');expected=os.getenv('APP_ORIGIN',request.host_url.rstrip('/'))
-        if origin and origin!=expected:fail(403,'Untrusted request origin.')
+        trusted={expected}
+        if os.getenv('FLASK_ENV')!='production':trusted.update({'http://localhost:5173','http://127.0.0.1:5173'})
+        if origin and origin not in trusted:fail(403,'Untrusted request origin.')
 @app.after_request
 def headers(response):
     response.headers.update({'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'same-origin','Content-Security-Policy':"default-src 'self';style-src 'self' 'unsafe-inline';img-src 'self' data:;connect-src 'self';frame-ancestors 'none';base-uri 'self';form-action 'self'"})
