@@ -8,8 +8,8 @@ from flask import Flask, Response, g, jsonify, request, send_file, send_from_dir
 from werkzeug.security import check_password_hash, generate_password_hash
 
 ROOT=Path(__file__).resolve().parent.parent
-DB=Path(os.getenv('DATABASE_PATH',ROOT/'data'/'campus.db'))
-DIST=ROOT/'dist'; SESSION_AGE=86400
+DB=Path(os.getenv('DATABASE_PATH',Path(__file__).resolve().parent/'data'/'campus.db'))
+DIST=ROOT/'frontend'/'dist'; SESSION_AGE=86400
 TRANSITIONS={'Under review':{'Shortlisted','Rejected','Withdrawn'},'Shortlisted':{'Interview scheduled','Selected','Rejected','Withdrawn'},'Interview scheduled':{'Interview scheduled','Selected','Rejected','Withdrawn'},'Selected':set(),'Rejected':set(),'Withdrawn':set()}
 app=Flask(__name__,static_folder=None);app.config['MAX_CONTENT_LENGTH']=4*1024*1024
 event_condition=threading.Condition();event_version=0;attempts={}

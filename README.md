@@ -4,18 +4,32 @@ A working campus placement application for students, recruiters, and placement o
 
 ## Run locally
 
+Start Flask in the first terminal:
+
 ```powershell
+cd "C:\Users\bbebi\OneDrive\Documents\placement app\backend"
+python -m venv .venv-flask
+.\.venv-flask\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python app.py
+```
+
+Start Vite in a second terminal:
+
+```powershell
+cd "C:\Users\bbebi\OneDrive\Documents\placement app\frontend"
 npm ci
-python -m venv backend/.venv-flask
-.\backend\.venv-flask\Scripts\python.exe -m pip install -r backend/requirements.txt
 npm run dev
 ```
 
-Open http://localhost:5173. The development command starts Vite and the API on port 5000. `/api` is proxied to the backend. For a built application:
+Open the URL printed by Vite, normally http://localhost:5173. `/api` is proxied to Flask on port 5000. For a built frontend:
 
 ```powershell
+cd frontend
 npm run build
-npm start
+cd ..\backend
+$env:FLASK_ENV = "production"
+python app.py
 ```
 
 Open http://127.0.0.1:5000. No default users, shared passwords, demo records, or fake success responses are created. The database is initialized automatically at `data/campus.db`.
@@ -38,7 +52,8 @@ In PowerShell, read a password without printing it to the terminal, then provisi
 
 ```powershell
 $env:ADMIN_PASSWORD = Read-Host 'Officer password (12+ characters)' -MaskInput
-npm run admin -- officer@college.edu "Placement Officer"
+cd backend
+.\.venv-flask\Scripts\python.exe manage.py create-officer officer@college.edu "Placement Officer"
 Remove-Item Env:ADMIN_PASSWORD
 ```
 
@@ -46,7 +61,7 @@ Students and recruiters cannot self-register as officers. Provisioning does not 
 
 ```powershell
 $env:ADMIN_PASSWORD = Read-Host 'New password (12+ characters)' -MaskInput
-.\backend\.venv-flask\Scripts\python.exe backend/manage.py reset-password person@college.edu
+.\.venv-flask\Scripts\python.exe manage.py reset-password person@college.edu
 Remove-Item Env:ADMIN_PASSWORD
 ```
 
@@ -72,7 +87,7 @@ docker build -t campus-flow .
 docker run -d --name campus-flow --restart unless-stopped \
   -p 127.0.0.1:5000:5000 \
   -e APP_ORIGIN=https://placements.example.edu \
-  -v campus-flow-data:/app/data campus-flow
+  -v campus-flow-data:/app/backend/data campus-flow
 ```
 
 Provision the officer in the same container/database using `python backend/manage.py create-officer` with `ADMIN_PASSWORD` supplied securely. The image defaults to `FLASK_ENV=production`, so browser access must use HTTPS through a reverse proxy. Set `APP_ORIGIN` to the exact public origin, without a trailing slash. Environment files are examples only; load environment variables through your process manager or container runtime.
@@ -94,7 +109,8 @@ SQLite access uses Python's standard `sqlite3` module. Waitress serves Flask in 
 Create a consistent SQLite snapshot while the application is running:
 
 ```powershell
-.\backend\.venv-flask\Scripts\python.exe backend/manage.py backup backups/campus-2026-09-10.db
+cd backend
+.\.venv-flask\Scripts\python.exe manage.py backup backups/campus-2026-09-10.db
 ```
 
 The destination must not exist. Set `DATABASE_PATH` if using a non-default database. Store backups securely outside the application host. Restore by stopping the server, preserving the current database and its `-wal`/`-shm` companions elsewhere, placing the backup at `DATABASE_PATH`, and restarting. Test restoration regularly. Never copy only the live main `.db` file while WAL writes are in progress.
@@ -102,7 +118,9 @@ The destination must not exist. Set `DATABASE_PATH` if using a non-default datab
 ## Verification
 
 ```powershell
-npm test
+cd backend
+.\.venv-flask\Scripts\python.exe -m unittest discover -p "test_*.py"
+cd ..\frontend
 npm run build
 npm audit --omit=dev
 ```
@@ -115,4 +133,4 @@ Docker and a public HTTPS deployment have not been exercised in the local test e
 
 ## Legacy data
 
-The original prototype database at `backend/placement.db` is preserved and is not used by the application. It is not imported automatically because it contains a plaintext demo password and expired job dates. New Flask data is stored at `data/campus.db`.
+The original prototype database at `backend/placement.db` is preserved and is not used by the application. It is not imported automatically because it contains a plaintext demo password and expired job dates. Active Flask data is stored at `backend/data/campus.db`.
