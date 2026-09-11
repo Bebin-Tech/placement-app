@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from functools import wraps
 from io import BytesIO
 from pathlib import Path
+from urllib.parse import urlsplit
 from flask import Flask, Response, g, jsonify, request, send_file, send_from_directory
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -75,9 +76,11 @@ def secure_mutation():
     if request.method in {'POST','PATCH','PUT','DELETE'}:
         if not request.is_json:fail(415,'Send application/json.')
         origin=request.headers.get('Origin');expected=os.getenv('APP_ORIGIN',request.host_url.rstrip('/'))
-        trusted={expected}
-        if os.getenv('FLASK_ENV')!='production':trusted.update({'http://localhost:5173','http://127.0.0.1:5173'})
-        if origin and origin not in trusted:fail(403,'Untrusted request origin.')
+        local_origin=False
+        if origin and os.getenv('FLASK_ENV')!='production':
+            parsed=urlsplit(origin)
+            local_origin=parsed.scheme=='http' and parsed.hostname in {'localhost','127.0.0.1','::1'}
+        if origin and origin!=expected and not local_origin:fail(403,'Untrusted request origin.')
 @app.after_request
 def headers(response):
     response.headers.update({'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'same-origin','Content-Security-Policy':"default-src 'self';style-src 'self' 'unsafe-inline';img-src 'self' data:;connect-src 'self';frame-ancestors 'none';base-uri 'self';form-action 'self'"})
