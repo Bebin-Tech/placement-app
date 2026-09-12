@@ -71,3 +71,98 @@ nav button:hover{color:#fff;background:rgba(255,255,255,.06);transform:translate
 @media(max-width:1050px){.metrics{grid-template-columns:repeat(2,1fr)}.content-grid{grid-template-columns:1fr}.right-column{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:850px){.sidebar{position:fixed;left:0;z-index:25;visibility:hidden;transform:translateX(-100%);transition:.22s ease}.sidebar.open{visibility:visible;transform:none}.nav-backdrop{display:block;position:fixed;inset:0;z-index:24;background:rgba(15,23,42,.55);backdrop-filter:blur(2px)}.mobile-menu{display:grid;place-items:center;min-width:40px;min-height:40px;border-radius:9px}.topbar{gap:14px;justify-content:flex-start;padding:0 22px}.top-actions{margin-left:auto}.page-wrap{padding:34px 22px 60px}.operations-grid{grid-template-columns:1fr}.application-card{flex-wrap:wrap}.application-actions{flex-flow:row wrap;align-items:center}.admin-row{flex-wrap:wrap}.admin-row>div{min-width:180px}}
 @media(max-width:600px){.top-name{display:none}.topbar{height:67px}.breadcrumb{font-size:13px}.welcome-row{display:block}.welcome-row .primary-action{width:100%;margin-top:20px}.welcome-row h1{font-size:31px}.subtitle{font-size:14px}.metrics{grid-template-columns:1fr;gap:12px}.metrics>div{min-height:108px;padding:20px}.right-column{grid-template-columns:1fr}.panel-header{padding:21px 19px 17px}.job-card,.application-card{padding:20px 19px}.search-box{align-items:stretch;flex-wrap:wrap;padding:12px 15px}.search-box input{min-width:calc(100% - 30px)}.search-box select{width:100%;max-width:none}.application-actions{align-items:flex-start}.admin-row{padding:14px 19px}.form-row,.profile-fields{grid-template-columns:1fr}.profile-page{padding:22px 19px}.profile-form,.resume-upload{padding:19px}.table-head,.table-row{grid-template-columns:1fr 72px;padding:0 16px}.table-head span:nth-child(2),.table-head span:nth-child(3),.table-row .date-cell,.table-row .status{display:none}.row-menu{justify-self:end}.modal{padding:26px 20px;border-radius:15px}.auth-page{padding:18px 14px}.auth-form-wrap{padding:30px 22px;border-radius:16px}.auth-form h2{font-size:30px}.toast{right:16px;bottom:16px;left:16px}}
+
+/* Light academic workspace theme with an auto-expanding desktop sidebar. */
+:root{
+  --ink:#101828;
+  --muted:#64748b;
+  --line:#dce6f2;
+  --canvas:#f3f8ff;
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --primary-soft:#eaf3ff;
+  --cyan:#0d9488;
+  --success:#059669;
+  --shadow:0 12px 32px rgba(51,76,112,.08);
+}
+html,body{background:var(--canvas)}
+.app-shell{background:linear-gradient(145deg,#f8fbff 0%,#edf5ff 100%)}
+.sidebar{
+  position:fixed;
+  z-index:22;
+  width:84px;
+  padding:22px 14px 18px;
+  color:#53657d;
+  background:rgba(255,255,255,.98);
+  border-right:1px solid #d9e4f1;
+  box-shadow:8px 0 28px rgba(62,88,123,.08);
+  overflow-x:hidden;
+  transition:width .28s cubic-bezier(.22,1,.36,1),box-shadow .28s ease;
+}
+.sidebar:hover,.sidebar:focus-within{width:286px;box-shadow:14px 0 38px rgba(50,75,112,.14)}
+.main-content{margin-left:84px}
+.brand{justify-content:center;gap:10px;min-height:42px;padding:0 11px 32px;color:#101828;white-space:nowrap}
+.brand-mark{width:38px;height:38px;flex-shrink:0;color:#fff;background:linear-gradient(145deg,#3b82f6,#1d4ed8);border-color:#bfdbfe;box-shadow:0 8px 18px rgba(37,99,235,.2)}
+.brand-name,.nav-label,.connection-label,.role-details,.workspace-label{overflow:hidden;opacity:0;white-space:nowrap;transition:opacity .15s ease .02s,max-width .25s ease}
+.brand-name{max-width:0;font-size:21px}.brand-dot{color:#0d9488}
+.sidebar:hover .brand,.sidebar:focus-within .brand{justify-content:flex-start}
+.sidebar:hover .brand-name,.sidebar:focus-within .brand-name{max-width:180px;opacity:1;transition-delay:.09s}
+.workspace-label{max-width:0;height:22px;padding:0 12px;color:#8291a6}
+.sidebar:hover .workspace-label,.sidebar:focus-within .workspace-label{max-width:190px;opacity:1;transition-delay:.09s}
+.role-picker{justify-content:center;margin-bottom:22px;padding:9px;background:#f8fbff;border:1px solid #dbe7f4}
+.avatar,.top-avatar{color:#08736c;background:linear-gradient(145deg,#ccfbf1,#99f6e4);border:1px solid #99e8dc}
+.role-details{display:flex!important;max-width:0}
+.role-picker strong{color:#172033}.role-picker span{color:#718096}
+.sidebar:hover .role-picker,.sidebar:focus-within .role-picker{justify-content:flex-start}
+.sidebar:hover .role-details,.sidebar:focus-within .role-details{max-width:190px;opacity:1;transition-delay:.09s}
+nav button,.sidebar-bottom button{justify-content:center;color:#60738d;border:1px solid transparent}
+nav button svg,.sidebar-bottom button svg{min-width:20px}
+.nav-label{max-width:0}
+.sidebar:hover nav button,.sidebar:focus-within nav button,.sidebar:hover .sidebar-bottom button,.sidebar:focus-within .sidebar-bottom button{justify-content:flex-start}
+.sidebar:hover .nav-label,.sidebar:focus-within .nav-label{max-width:190px;opacity:1;transition-delay:.09s}
+nav button:hover{color:#1d4ed8;background:#f3f7ff;border-color:#dbeafe;transform:none}
+nav button.active{color:#1d5fda;background:#eaf3ff;border-color:#b9d4ff;box-shadow:none}
+nav button.active svg{color:#2563eb}
+.sidebar-bottom{border-top-color:#e6edf5}
+.sidebar-bottom .logout{color:#dc264d}.sidebar-bottom .logout:hover{color:#c3133d;background:#fff1f4;border-color:#ffc9d4}
+.connection{justify-content:center;padding-inline:11px;color:#d97706}
+.connection.online{color:#059669}
+.connection-label{max-width:0}
+.sidebar:hover .connection,.sidebar:focus-within .connection{justify-content:flex-start}
+.sidebar:hover .connection-label,.sidebar:focus-within .connection-label{max-width:210px;opacity:1;transition-delay:.09s}
+.topbar{background:rgba(255,255,255,.94);border-bottom-color:#dce6f2;box-shadow:0 7px 22px rgba(55,82,116,.06)}
+.icon-button{color:#5f7087;background:#f8fbff;border-color:#d9e5f2}.icon-button:hover{color:#2563eb;background:#eaf3ff}
+.welcome-row .eyebrow{color:#2563eb}.welcome-row h1 span{color:#2563eb}
+.primary-action{background:linear-gradient(135deg,#3575ed,#1f56d5);box-shadow:0 9px 20px rgba(37,99,235,.22)}
+.primary-action:hover{background:linear-gradient(135deg,#2563eb,#194cc3);box-shadow:0 12px 24px rgba(37,99,235,.28)}
+.panel,.profile-card{border-color:#d9e5f1;box-shadow:var(--shadow)}
+.metrics>div{border-color:#d9e5f1;box-shadow:0 9px 25px rgba(62,88,122,.07)}
+.metrics>div:nth-child(1){background:linear-gradient(145deg,#fff,#f3f7ff)}
+.metrics>div:nth-child(2){background:linear-gradient(145deg,#fff,#effcf9)}
+.metrics>div:nth-child(3){background:linear-gradient(145deg,#fff,#f0fdf7)}
+.metrics>div:nth-child(4){background:linear-gradient(145deg,#fff,#fff8ed)}
+.metrics>div:nth-child(1):before{background:#2563eb}.metrics>div:nth-child(2):before{background:#0d9488}.metrics>div:nth-child(3):before{background:#10b981}.metrics>div:nth-child(4):before{background:#f59e0b}
+.metrics>div:after{background:rgba(37,99,235,.055)}
+.result-count,.apply-button,.empty-state svg,.empty-icon{color:#1d5fda;background:#eaf3ff}
+.company-logo,.company-logo.blue{color:#1d5fda;background:#edf5ff;border-color:#d4e5ff}
+.save-button:hover,.save-button.saved{color:#2563eb;background:#eaf3ff}
+.profile-avatar{background:linear-gradient(145deg,#3b82f6,#1d4ed8)}
+.profile-card progress{accent-color:#2563eb}.progress-label strong{color:#2563eb}
+.outline-button{color:#1d5fda;border-color:#bad3fb}.outline-button:hover{background:#edf5ff;border-color:#8bb5f5}
+.auth-page{background:radial-gradient(circle at 15% 20%,rgba(37,99,235,.16),transparent 28%),radial-gradient(circle at 85% 75%,rgba(13,148,136,.14),transparent 30%),linear-gradient(145deg,#f8fbff,#edf5ff)}
+.auth-page:before,.auth-page:after{border-color:rgba(37,99,235,.14)}.auth-form .eyebrow,.modal .eyebrow{color:#2563eb}
+
+@media(max-width:850px){
+  .main-content{margin-left:0}
+  .sidebar{position:fixed;width:286px;padding:22px 14px 18px;box-shadow:14px 0 38px rgba(50,75,112,.14)}
+  .sidebar .brand{justify-content:flex-start}
+  .sidebar .brand-name,.sidebar .nav-label,.sidebar .connection-label,.sidebar .role-details,.sidebar .workspace-label{max-width:210px;opacity:1}
+  .sidebar .role-picker,.sidebar nav button,.sidebar .sidebar-bottom button,.sidebar .connection{justify-content:flex-start}
+}
+
+@media(min-width:851px){
+  .sidebar:not(:hover){width:84px}
+  .sidebar:not(:hover) .brand{justify-content:center}
+  .sidebar:not(:hover) .brand-name,.sidebar:not(:hover) .nav-label,.sidebar:not(:hover) .connection-label,.sidebar:not(:hover) .role-details,.sidebar:not(:hover) .workspace-label{max-width:0;opacity:0;transition-delay:0s}
+  .sidebar:not(:hover) .role-picker,.sidebar:not(:hover) nav button,.sidebar:not(:hover) .sidebar-bottom button,.sidebar:not(:hover) .connection{justify-content:center}
+}
