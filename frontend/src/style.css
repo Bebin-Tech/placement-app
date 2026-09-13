@@ -208,3 +208,6 @@ nav button.active svg{color:#2563eb}
 @media(prefers-reduced-motion:reduce){
   .sidebar,.main-content,.brand-name,.nav-label,.connection-label,.role-details,.workspace-label{transition:none}
 }
+
+/* Live updates continue in the background without a sidebar status row. */
+.sidebar .connection{display:none}
