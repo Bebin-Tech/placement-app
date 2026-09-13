@@ -211,3 +211,22 @@ nav button.active svg{color:#2563eb}
 
 /* Live updates continue in the background without a sidebar status row. */
 .sidebar .connection{display:none}
+
+/* Campus Flow three-circle identity. */
+.brand-mark{
+  width:46px;
+  height:46px;
+  background:#fff url('/campus-flow-logo.svg') center/contain no-repeat;
+  border:0;
+  border-radius:10px;
+  box-shadow:none;
+}
+.brand-mark svg{display:none}
+.auth-form::before{
+  content:"";
+  display:block;
+  width:68px;
+  height:62px;
+  margin:0 0 18px;
+  background:url('/campus-flow-logo.svg') center/contain no-repeat;
+}

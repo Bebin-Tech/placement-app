@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 108" role="img" aria-labelledby="title">
+  <title id="title">Campus Flow</title>
+  <g fill="none" stroke-width="13">
+    <circle cx="60" cy="31" r="23" stroke="#f97316"/>
+    <circle cx="34" cy="76" r="23" stroke="#0798d2"/>
+    <circle cx="86" cy="76" r="23" stroke="#a5c326"/>
+  </g>
+  <circle cx="60" cy="31" r="7" fill="#f97316"/>
+  <circle cx="34" cy="76" r="7" fill="#0798d2"/>
+  <circle cx="86" cy="76" r="7" fill="#a5c326"/>
+</svg>
