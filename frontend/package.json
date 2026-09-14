@@ -1,17 +1,20 @@
 {
-  "name": "placement-appplacement-app",
+  "name": "campus-flow-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"*.{json,ts,html}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"*.{json,ts,html}\""
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
+    "prettier": "^3.9.6",
     "typescript": "~6.0.2",
     "vite": "^8.2.2"
   },

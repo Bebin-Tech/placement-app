@@ -2,6 +2,37 @@
 
 A working campus placement application for students, recruiters, and placement officers. It uses a React + TypeScript frontend, Flask API, and persistent SQLite storage. Python 3.12+ and Node.js are required for local development.
 
+## Project structure
+
+```text
+frontend/
+  public/                  Static brand assets
+  src/
+    components/            Authentication, navigation, and reusable UI
+    api.ts                  Typed API client and CSRF state
+    types.ts                Shared frontend domain models
+    utils.ts                Form and presentation helpers
+    App.tsx                 Application state and workspace views
+    main.tsx                React entry point
+backend/
+  app.py                    Flask routes and application services
+  schema.sql                SQLite schema and indexes
+  manage.py                 Officer, password, and backup commands
+  test_app.py               Isolated API workflow tests
+  requirements.txt         Production dependencies
+  requirements-dev.txt     Development and formatting dependencies
+```
+
+Frontend files use Prettier and Python files use Black. Run the formatters before committing:
+
+```powershell
+cd frontend
+npm run format
+cd ..\backend
+.\.venv-flask\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv-flask\Scripts\python.exe -m black app.py manage.py test_app.py
+```
+
 ## Run locally
 
 Start Flask in the first terminal:
